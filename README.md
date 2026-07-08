@@ -24,7 +24,6 @@
   - [android — Android 客户端](#android--android-客户端)
 - [算法原理](#-算法原理)
 - [ESP32-S3 CSI 硬件局限](#-esp32-s3-csi-硬件局限)
-- [开源前检查清单](#-开源前检查清单)
 - [许可证](#-许可证)
 
 ---
@@ -330,23 +329,6 @@ AGC 方差曲线 → 1D-CNN，3-fold CV 准确率 **96%**（详见 `csi_recv/too
 | **晶振相位噪声** | ±25ppm 低成本晶振，2.4GHz 载波漂移 ±60kHz | 相位/多普勒信息不可用，只能依赖幅度特征 |
 
 > 以上局限使得本系统只能依赖**子载波间相对幅度形状**（频率选择性衰落）作为特征。阈值需在**实际部署环境**中重新标定，不同房间的多径结构差异显著。
-
----
-
-## ✅ 开源前检查清单
-
-在发布到 GitHub 前，请确认以下事项：
-
-- [ ] **WiFi 密码：** `csi_recv/main/app_main.c` 和 `csi_send/main/app_main.c` 中的 SSID/密码已替换为占位符
-- [ ] **服务器 IP：** `csi_recv/main/app_main.c` 中的 `UDP_SERVER_IP` 已替换为占位符
-- [x] **Android 图片：** 检查 `android/app/src/main/res/drawable/` 中的 `a.jpg`, `main.png`, `p2.png`, `picture.png` 是否包含个人信息
-- [ ] **API Key / Secret：** 确认所有 `.env` 和代码中的密钥已替换为占位符
-- [ ] **Git 历史：** 检查 Git 历史记录中是否包含敏感信息（如有，考虑 `git filter-branch` 或重新初始化仓库）
-- [x] **许可证统一：** 已统一为顶层 MIT 许可证，`csi_send/README.md` 已修正
-- [x] **`database_structure.sql`：** 头部 mysqldump 错误信息已清理
-- [x] **`csi_send/README.md` 路径引用：** 上游路径 `esp-csi/examples/...` 已修正为 `csi_send`
-- [x] **Dockerfile 镜像源：** `mobile-backend/Dockerfile` 清华 PyPI 镜像已移除
-- [x] **Python 依赖版本：** `mobile-backend/requirements.txt` 已统一为 `>=` 约束风格
 
 ---
 
