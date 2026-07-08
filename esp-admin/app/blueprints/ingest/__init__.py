@@ -1,0 +1,1 @@
+"""UDP ingest CLI blueprint."""

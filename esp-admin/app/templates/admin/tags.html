@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}NFC 标签 - ESP32 Admin{% endblock %}
+
+{% block content %}
+  <h1>NFC 标签</h1>
+
+  {% if error %}
+    <div class="alert">{{ error }}</div>
+    <div style="height: 10px"></div>
+  {% endif %}
+
+  <div class="card">
+    <h2>新增 / 重新绑定标签</h2>
+    <form class="form" method="post" action="/tags">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div>
+        <div class="muted">UID</div>
+        <input name="uid" placeholder="例如：04a2243f9c..." />
+        <div class="muted">建议填写 NFC 读到的原始 UID（系统会做归一化）</div>
+      </div>
+      <div>
+        <div class="muted">区域</div>
+        <select name="area_id">
+          <option value="">请选择</option>
+          {% for a in areas %}
+            <option value="{{ a.id }}">{{ a.name }}{% if not a.is_active %}（停用）{% endif %}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit">保存</button>
+    </form>
+  </div>
+
+  <h2>标签列表</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>UID</th>
+        <th>区域</th>
+        <th>状态</th>
+        <th>Created</th>
+        <th>启用/停用</th>
+        <th>删除</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in tags %}
+        <tr>
+          <td>{{ t.id }}</td>
+          <td>{{ t.uid }}</td>
+          <td>{{ t.area.name if t.area else "-" }}</td>
+          <td>{{ "启用" if t.is_active else "停用" }}</td>
+          <td>{{ t.created_at | dt }}</td>
+          <td>
+            <form method="post" action="/tags/{{ t.id }}/toggle" class="inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <button type="submit">{{ "停用" if t.is_active else "启用" }}</button>
+            </form>
+          </td>
+          <td>
+            {% if not t.is_active %}
+              <form method="post" action="/tags/{{ t.id }}/delete" class="inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <button type="submit">删除</button>
+              </form>
+            {% else %}
+              -
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

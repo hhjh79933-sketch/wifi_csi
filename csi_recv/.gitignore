@@ -1,0 +1,34 @@
+# ESP-IDF build output
+build/
+
+# ESP-IDF config (contains local paths/secrets)
+sdkconfig
+sdkconfig.old
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.clangd
+
+# Dependencies
+managed_components/
+dependencies.lock
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data files (optional: keep if you want to share dataset)
+# data/
+# test/
+
+# Models (optional: keep if you want to share trained model)
+# models/
+
+# Logs
+*.log
+events.jsonl

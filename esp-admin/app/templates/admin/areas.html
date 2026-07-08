@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}区域 - ESP32 Admin{% endblock %}
+
+{% block content %}
+  <h1>区域</h1>
+
+  {% if error %}
+    <div class="alert">{{ error }}</div>
+    <div style="height: 10px"></div>
+  {% endif %}
+
+  <div class="card">
+    <h2>新增区域</h2>
+    <form class="form" method="post" action="/areas">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div>
+        <div class="muted">名称</div>
+        <input name="name" placeholder="例如：A区 3楼 305" />
+      </div>
+      <div>
+        <div class="muted">备注（可选）</div>
+        <textarea name="note" rows="3" placeholder="可选"></textarea>
+      </div>
+      <button type="submit">创建</button>
+    </form>
+  </div>
+
+  <h2>区域列表</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>名称</th>
+        <th>状态</th>
+        <th>备注</th>
+        <th>Created</th>
+        <th>启用/停用</th>
+        <th>删除</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in areas %}
+        <tr>
+          <td>{{ a.id }}</td>
+          <td><a href="/areas/{{ a.id }}">{{ a.name }}</a></td>
+          <td>{{ "启用" if a.is_active else "停用" }}</td>
+          <td>{{ a.note or "-" }}</td>
+          <td>{{ a.created_at | dt }}</td>
+          <td>
+            <form method="post" action="/areas/{{ a.id }}/toggle" class="inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <button type="submit">{{ "停用" if a.is_active else "启用" }}</button>
+            </form>
+          </td>
+          <td>
+            {% if not a.is_active %}
+              <form method="post" action="/areas/{{ a.id }}/delete" class="inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <button type="submit">删除</button>
+              </form>
+            {% else %}
+              -
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

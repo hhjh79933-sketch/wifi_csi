@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}事件详情 - ESP32 Admin{% endblock %}
+
+{% block content %}
+  <h1>事件详情</h1>
+
+  <div class="card">
+    <div><b>发生时间：</b>{{ event.created_at | dt }}</div>
+    <div><b>发生位置：</b>{% if area %}{{ area.name }}{% else %}-{% endif %}</div>
+    <div><b>关联设备：</b>
+      {% if event.device %}
+        <a href="/devices/{{ event.device.id }}">{{ event.device.mac }}</a>
+      {% else %}-{% endif %}
+    </div>
+
+    <hr />
+
+    {% if event.type == 'csi_evt' %}
+      <div>
+        <b>处理状态：</b>
+        {% if event.state is none %}
+          <span style="display:inline-block;background:#f8d7da;color:#721c24;padding:2px 10px;border-radius:4px;font-weight:600;">未处理</span>
+        {% elif event.state == 0 %}
+          <span style="display:inline-block;background:#fff3cd;color:#856404;padding:2px 10px;border-radius:4px;font-weight:600;">误报</span>
+        {% elif event.state == 1 %}
+          <span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 10px;border-radius:4px;font-weight:600;">已处理</span>
+        {% else %}
+          {{ event.state }}
+        {% endif %}
+      </div>
+      {% if event.prev is not none %}
+        <div><b>上次状态：</b>{% if event.prev is none %}未处理{% elif event.prev == 0 %}误报{% elif event.prev == 1 %}已处理{% else %}{{ event.prev }}{% endif %}</div>
+      {% endif %}
+      {% if event.seq is not none %}
+        <div class="muted" style="font-size:12px;margin-top:8px;">数据采集序号：{{ event.seq }}</div>
+      {% endif %}
+    {% elif event.type == 'hb' %}
+      <div><b>心跳计数：</b>{{ event.count if event.count is not none else "-" }}</div>
+      <div><b>运行时长：</b>{{ "%.1f 小时" | format(event.uptime_ms / 3600000) if event.uptime_ms is not none else "-" }}</div>
+    {% else %}
+      <div class="muted">未知事件类型</div>
+    {% endif %}
+  </div>
+
+  {% if event.note %}
+  <h2>备注</h2>
+  <div class="card">
+    <p style="margin:0;line-height:1.8;">{{ event.note }}</p>
+  </div>
+  {% endif %}
+
+  <h2>原始数据</h2>
+  <pre class="pre">{{ event.raw_or_json | pretty_json }}</pre>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}用户 - ESP32 Admin{% endblock %}
+
+{% block content %}
+  <h1>用户管理</h1>
+
+  {% if error %}
+    <div class="alert">{{ error }}</div>
+  {% endif %}
+
+  <div class="card" style="margin-bottom:16px;">
+    <h2>新增用户</h2>
+    <form class="form" method="post" action="/users">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div>
+        <div class="muted">用户名</div>
+        <input name="username" placeholder="例如：zhangsan" />
+      </div>
+      <div>
+        <div class="muted">密码</div>
+        <input name="password" type="password" placeholder="至少 4 位" />
+      </div>
+      <div>
+        <label><input type="checkbox" name="is_admin" value="1" /> 管理员</label>
+      </div>
+      <button type="submit">创建</button>
+    </form>
+  </div>
+
+  <h2>用户列表</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>用户名</th>
+        <th>角色</th>
+        <th>负责区域</th>
+        <th>Created</th>
+        <th>更改区域</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+        <tr>
+          <td>{{ u.id }}</td>
+          <td>{{ u.username }}</td>
+          <td>{{ "管理员" if u.is_admin else "普通用户" }}</td>
+          <td>{{ u.current_area.name if u.current_area else "-" }}</td>
+          <td>{{ u.created_at | dt }}</td>
+          <td>
+            <form method="post" action="/users/{{ u.id }}/area" class="inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <select name="area_id" onchange="this.form.submit()">
+                <option value="">未分配</option>
+                {% for a in areas %}
+                  <option value="{{ a.id }}" {% if u.current_area_id == a.id %}selected{% endif %}>{{ a.name }}{% if not a.is_active %}（停用）{% endif %}</option>
+                {% endfor %}
+              </select>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}{{ area.name }} - ESP32 Admin{% endblock %}
+
+{% block content %}
+  <h1>{{ area.name }}</h1>
+
+  <div class="card">
+    <div><b>状态:</b> {{ "启用" if area.is_active else "停用" }}</div>
+    <div><b>备注:</b> {{ area.note or "-" }}</div>
+    <div><b>创建时间:</b> {{ area.created_at | dt }}</div>
+    <div><b>当前用户:</b>
+      {% if current_users %}
+        {% for u in current_users %}{{ u.username }}{% if not loop.last %}、{% endif %}{% endfor %}
+      {% else %}-{% endif %}
+    </div>
+  </div>
+
+  <h2>用户分配历史（最近 100 条）</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>用户</th>
+        <th>分配时间</th>
+        <th>操作者</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in assignments %}
+        <tr>
+          <td>{{ a.id }}</td>
+          <td>{{ a.user.username if a.user else "-" }}</td>
+          <td>{{ a.created_at | dt }}</td>
+          <td>{{ a.assigned_by or "-" }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>NFC 标签</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>UID</th>
+        <th>状态</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in tags %}
+        <tr>
+          <td>{{ t.id }}</td>
+          <td>{{ t.uid }}</td>
+          <td>{{ "启用" if t.is_active else "停用" }}</td>
+          <td>{{ t.created_at | dt }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

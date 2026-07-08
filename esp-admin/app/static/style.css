@@ -1,0 +1,255 @@
+:root {
+  --fg: #111;
+  --bg: #fff;
+  --muted: #666;
+  --border: #ddd;
+  --card: #fafafa;
+  --alert: #fff3cd;
+  --green: #28a745;
+  --red: #dc3545;
+  --gray: #6c757d;
+  --zebra: #f8f9fa;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+}
+
+a { color: inherit; }
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ── topbar ── */
+.topbar {
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+
+.topbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand a {
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.nav a {
+  margin-left: 12px;
+  text-decoration: none;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.nav a:hover,
+.nav a.active {
+  border-bottom-color: var(--fg);
+}
+
+/* ── footer ── */
+.footer {
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+  background: var(--card);
+}
+
+/* ── grid ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* ── card ── */
+.card {
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.card .k {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.card .v {
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+/* status cards */
+.card.status-ok  { border-left: 4px solid var(--green); }
+.card.status-ok  .v { color: var(--green); }
+.card.status-warn { border-left: 4px solid var(--red); }
+.card.status-warn .v { color: var(--red); }
+.card.status-off { border-left: 4px solid var(--gray); }
+.card.status-off .v { color: var(--gray); }
+
+/* ── table ── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  border-bottom: 2px solid var(--border);
+  padding: 10px 8px;
+  text-align: left;
+  vertical-align: top;
+  background: var(--card);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.table td {
+  border-bottom: 1px solid var(--border);
+  padding: 10px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.table tbody tr:nth-child(even) { background: var(--zebra); }
+.table tbody tr:hover { background: #e9ecef; }
+
+/* ── form ── */
+.form {
+  display: grid;
+  gap: 10px;
+  max-width: 420px;
+}
+
+.form input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.form select,
+.form textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+}
+
+.form button {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.form button:hover {
+  background: #333;
+}
+
+.inline { display: inline; }
+
+.inline button {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card);
+  cursor: pointer;
+}
+
+.inline button:hover {
+  background: var(--border);
+}
+
+/* ── alert ── */
+.alert {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--alert);
+}
+
+.muted { color: var(--muted); }
+
+.pre {
+  border: 1px solid var(--border);
+  background: #f7f7f7;
+  padding: 12px;
+  border-radius: 8px;
+  overflow: auto;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 12px 0;
+}
+
+/* ── login page ── */
+.login-wrapper {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  padding: 32px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+.login-card h1 {
+  margin-top: 0;
+  text-align: center;
+}
+
+/* ── responsive ── */
+@media (max-width: 768px) {
+  .topbar .container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav a {
+    margin-left: 0;
+    margin-right: 12px;
+    font-size: 14px;
+  }
+
+  .grid,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .table { font-size: 13px; }
+
+  .login-card {
+    margin: 16px;
+    padding: 24px;
+  }
+}

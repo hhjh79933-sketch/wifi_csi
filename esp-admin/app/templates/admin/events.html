@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}事件 - ESP32 Admin{% endblock %}
+
+{% block content %}
+  <h1>事件记录</h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>时间</th>
+        <th>位置</th>
+        <th>状态</th>
+        <th>备注</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in events %}
+        <tr style="cursor:pointer;" onclick="location.href='/events/{{ e.id }}'">
+          <td>
+            <div style="font-weight:600;">{{ e.created_at | relative_time }}</div>
+            <div class="muted" style="font-size:12px;">{{ e.created_at | dt }}</div>
+          </td>
+          <td>
+            {% set area_name = area_map.get(e.device_id) %}
+            {% if area_name %}
+              <a href="/devices/{{ e.device.id }}" onclick="event.stopPropagation()">{{ area_name }}</a>
+            {% elif e.device %}
+              <a href="/devices/{{ e.device.id }}" onclick="event.stopPropagation()">{{ e.device.mac }}</a>
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td>
+            {% if e.state is none %}
+              <span style="display:inline-block;background:#f8d7da;color:#721c24;padding:2px 10px;border-radius:4px;font-size:13px;font-weight:600;">未处理</span>
+            {% elif e.state == 0 %}
+              <span style="display:inline-block;background:#fff3cd;color:#856404;padding:2px 10px;border-radius:4px;font-size:13px;font-weight:600;">误报</span>
+            {% elif e.state == 1 %}
+              <span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 10px;border-radius:4px;font-size:13px;font-weight:600;">已处理</span>
+            {% else %}
+              <span style="display:inline-block;background:#f5f5f5;color:#666;padding:2px 10px;border-radius:4px;font-size:13px;">{{ e.state }}</span>
+            {% endif %}
+          </td>
+          <td>
+            <span class="muted" style="font-size:13px;max-width:200px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ e.note or '-' }}</span>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

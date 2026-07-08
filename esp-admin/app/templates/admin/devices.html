@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}设备 - ESP32 Admin{% endblock %}
+
+{% block content %}
+  <h1>设备管理</h1>
+
+  {% if error %}
+    <div class="alert">{{ error }}</div>
+  {% endif %}
+
+  <div class="card" style="margin-bottom:16px;">
+    <form class="form" method="post" action="/devices/add">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div style="display:flex;align-items:end;gap:8px;">
+        <div style="flex:1;">
+          <div class="muted">添加新设备</div>
+          <input name="mac" placeholder="输入设备编号，例如：aa:bb:cc:dd:ee:ff" />
+        </div>
+        <button type="submit">添加</button>
+      </div>
+    </form>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>设备</th>
+        <th>所在位置</th>
+        <th>运行状态</th>
+        <th>最后活跃</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in devices %}
+        <tr>
+          <td>
+            <a href="/devices/{{ d.id }}" style="font-weight:600;">设备 {{ d.id }}</a>
+            <div class="muted" style="font-size:12px;">{{ d.mac }}</div>
+          </td>
+          <td>
+            {% set b = current_bindings.get(d.id) if current_bindings else none %}
+            {% if b and b.area %}
+              {{ b.area.name }}
+            {% else %}
+              <span class="muted">未分配</span>
+            {% endif %}
+          </td>
+          {% set st = d.status(heartbeat_timeout_seconds, current_binding=current_bindings_map.get(d.id)) %}
+          <td>
+            {% if st == '正常' %}<span style="color: #28a745; font-weight: bold;">{{ st }}</span>
+            {% elif st == '异常' %}<span style="color: #dc3545; font-weight: bold;">{{ st }}</span>
+            {% else %}<span style="color: #6c757d;">{{ st }}</span>{% endif %}
+          </td>
+          <td>{{ d.last_seen_at | relative_time if d.last_seen_at else "从未" }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

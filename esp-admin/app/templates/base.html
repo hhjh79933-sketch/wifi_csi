@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}ESP32 Admin{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container">
+        <div class="brand"><a href="/">ESP32 Admin</a></div>
+        <nav class="nav">
+          <a href="/"        class="{{ 'active' if request.path == '/' else '' }}">Dashboard</a>
+          <a href="/devices" class="{{ 'active' if request.path.startswith('/devices') else '' }}">设备</a>
+          <a href="/areas"   class="{{ 'active' if request.path.startswith('/areas') else '' }}">区域</a>
+          <a href="/tags"    class="{{ 'active' if request.path.startswith('/tags') else '' }}">NFC 标签</a>
+          <a href="/users"   class="{{ 'active' if request.path.startswith('/users') else '' }}">用户</a>
+          <a href="/events"  class="{{ 'active' if request.path.startswith('/events') else '' }}">事件</a>
+          <a href="/logout">退出</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+      <div class="container">MVP</div>
+    </footer>
+  </body>
+</html>

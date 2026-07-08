@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - ESP32 Admin{% endblock %}
+
+{% block content %}
+  <h1>Dashboard</h1>
+
+  <h2>设备状态</h2>
+  <div class="grid grid-3">
+    <div class="card status-ok">
+      <div class="k">正常</div>
+      <div class="v">{{ ok_count }}</div>
+    </div>
+    <div class="card status-warn">
+      <div class="k">异常</div>
+      <div class="v">{{ warn_count }}</div>
+    </div>
+    <div class="card status-off">
+      <div class="k">停用</div>
+      <div class="v">{{ off_count }}</div>
+    </div>
+  </div>
+
+  <h2 style="margin-top:24px;">概况</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="k">设备总数</div>
+      <div class="v">{{ device_total }}</div>
+    </div>
+    <div class="card">
+      <div class="k">事件总数</div>
+      <div class="v">{{ event_total }}</div>
+    </div>
+    <div class="card">
+      <div class="k">最近一次 hb 时间</div>
+      <div class="v">{{ last_hb_at | dt }}</div>
+    </div>
+    <div class="card">
+      <div class="k">最近一次 csi_evt 时间</div>
+      <div class="v">{{ last_csi_at | dt }}</div>
+    </div>
+  </div>
+{% endblock %}

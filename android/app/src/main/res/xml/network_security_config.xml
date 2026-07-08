@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- 生产环境应仅允许 HTTPS，开发时如需使用 HTTP 可在此添加域名配置 -->
+    <!-- 开发环境允许 HTTP 明文流量，生产环境请仅使用 HTTPS -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">your-server-ip</domain>
+    </domain-config>
+</network-security-config>

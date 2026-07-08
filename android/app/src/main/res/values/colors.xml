@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- 主色：稳重蓝 -->
+    <color name="primary">#FF1565C0</color>
+    <color name="primary_dark">#FF0D47A1</color>
+    <color name="primary_light">#FF42A5F5</color>
+    <color name="on_primary">#FFFFFFFF</color>
+
+    <!-- 辅助色：青绿色 -->
+    <color name="secondary">#FF00897B</color>
+    <color name="secondary_dark">#FF00695C</color>
+    <color name="on_secondary">#FFFFFFFF</color>
+
+    <!-- 背景 -->
+    <color name="background">#FFF5F7FA</color>
+    <color name="surface">#FFFFFFFF</color>
+
+    <!-- 错误/警告色 -->
+    <color name="error">#FFD32F2F</color>
+    <color name="on_error">#FFFFFFFF</color>
+
+    <!-- 旧有颜色保留兼容 -->
+    <color name="light_blue_600">#FF1565C0</color>
+    <color name="light_blue_900">#FF0D47A1</color>
+    <color name="light_blue_A200">#FF42A5F5</color>
+    <color name="light_blue_A400">#FF1E88E5</color>
+    <color name="black_overlay">#66000000</color>
+</resources>

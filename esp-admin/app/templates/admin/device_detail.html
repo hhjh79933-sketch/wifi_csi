@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}设备详情 - ESP32 Admin{% endblock %}
+
+{% block content %}
+  <h1>设备 {{ device.id }}</h1>
+
+  <div class="card">
+    <div><b>设备编号：</b>{{ device.mac }}</div>
+    {% set st = device.status(heartbeat_timeout_seconds, current_binding_obj) %}
+    <div><b>运行状态：</b>
+      {% if st == '正常' %}<span style="color: #28a745; font-weight: bold;">{{ st }}</span>
+      {% elif st == '异常' %}<span style="color: #dc3545; font-weight: bold;">{{ st }}</span>
+      {% else %}<span style="color: #6c757d;">{{ st }}</span>{% endif %}
+    </div>
+    <div>
+      <b>所在位置：</b>
+      {% if current_binding and current_binding.area %}
+        {{ current_binding.area.name }}
+      {% else %}
+        <span class="muted">未分配</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <h2>更换位置</h2>
+  <div class="card">
+    <form class="form" method="post" action="/devices/{{ device.id }}/bind">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div>
+        <div class="muted">选择新位置</div>
+        <select name="area_id">
+          <option value="">请选择</option>
+          {% for a in areas %}
+            <option value="{{ a.id }}" {% if current_binding and current_binding.area_id == a.id %}selected{% endif %}>{{ a.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit">确认更换</button>
+    </form>
+    <div class="muted">提示：更换从当前时间生效，历史事件归属不变。</div>
+  </div>
+
+  {% if current_binding %}
+  <h2>取消分配</h2>
+  <div class="card">
+    <form method="post" action="/devices/{{ device.id }}/unbind" class="inline">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <button type="submit" style="background:#dc3545;color:#fff;border:none;">从 {{ current_binding.area.name }} 移除</button>
+    </form>
+    <div class="muted">移除后设备状态将变为「停用」。</div>
+  </div>
+  {% endif %}
+
+  <h2>位置变更记录</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>变更时间</th>
+        <th>位置</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for b in bindings %}
+        <tr>
+          <td>{{ b.effective_from | dt }}</td>
+          <td>{{ b.area.name if b.area else "-" }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
