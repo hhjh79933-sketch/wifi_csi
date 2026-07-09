@@ -9,6 +9,12 @@
 
 ---
 
+## 🎬 演示视频
+
+👉 **[B站观看：基于 Wi-Fi CSI 的实时跌倒检测系统](https://www.bilibili.com/video/BV1cVMJ6yEsW/)**
+
+---
+
 ## 📖 目录
 
 - [系统架构](#-系统架构)
