@@ -70,14 +70,7 @@ mobile-backend/
 
 ## 快速开始
 
-### 1. 克隆项目
-
-```bash
-git clone https://github.com/your-username/mobile-backend.git
-cd mobile-backend
-```
-
-### 2. 配置环境变量
+### 1. 配置环境变量
 
 ```bash
 cp .env.example .env
@@ -93,13 +86,13 @@ DB_NAME=esp_admin
 SECRET_KEY=your_random_secret_key
 ```
 
-### 3. 使用 Docker Compose 启动（推荐）
+### 2. 使用 Docker Compose 启动（推荐）
 
 ```bash
 docker compose up -d
 ```
 
-### 4. 本地开发运行
+### 3. 本地开发运行
 
 ```bash
 # 创建虚拟环境
