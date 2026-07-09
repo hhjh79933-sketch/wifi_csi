@@ -100,17 +100,6 @@ companion object {
 | `/verify_password` | POST | 验证原密码 |
 | `/change_password` | POST | 修改密码 |
 
-## 开源前检查清单
-
-在将此项目开源到 GitHub 之前，请确保：
-
-- [x] `ApiService.kt` 中的服务器 IP 已替换为占位符
-- [x] `network_security_config.xml` 中的内网 IP 已替换为占位符
-- [x] `strings.xml` 中的测试占位内容已清理
-- [ ] 检查 `res/drawable/` 目录中的图片文件（`a.jpg`, `main.png`, `p2.png`, `picture.png`）是否包含个人信息或敏感内容，如有需要请替换或删除
-- [ ] 检查 Git 历史记录中是否包含敏感信息（如有，考虑使用 `git filter-branch` 或重新初始化仓库）
-- [ ] 确认 `AndroidManifest.xml` 中的应用图标引用是你期望公开的图标
-
 ## 许可证
 
 请根据需要选择合适的开源许可证。
