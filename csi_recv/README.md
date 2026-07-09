@@ -23,34 +23,34 @@
 
 ## 🏗️ 系统架构
 
-```
-┌──────────────┐         UDP 发包 (~100Hz)          ┌──────────────────────┐
-│  发送板 (TX)  │ ─────────────────────────────────> │   接收板 (RX)         │
-│  ESP32-S3     │        Wi-Fi AP-STA 链路           │   ESP32-S3 (APSTA)    │
-│  纯发包机      │                                   │                        │
-└──────────────┘                                    │ ┌──────────────────┐ │
-                                                     │ │ CSI 解析          │ │
-                                                     │ │   ↓               │ │
-                                                     │ │ AGC 归一化        │ │
-                                                     │ │   ↓               │ │
-                                                     │ │ 子载波方差         │ │
-                                                     │ │   ↓               │ │
-                                                     │ │ 滑窗 + 阈值判定    │ │
-                                                     │ │   ↓               │ │
-                                                     │ │ WS2812B RGB LED   │ │
-                                                     │ │   ↓               │ │
-                                                     │ │ UDP → 云端上报     │ │
-                                                     │ └──────────────────┘ │
-                                                     └──────────────────────┘
-                                                                │
-                                                        UDP :9000
-                                                                │
-                                                     ┌──────────┴──────────┐
-                                                     │   云端服务器          │
-                                                     │   udp_ingest.py      │
-                                                     │   → JSONL 日志        │
-                                                     │   → Web 管理面板      │
-                                                     └──────────────────────┘
+```mermaid
+flowchart TB
+    subgraph TX["🔵 发送板 (TX)"]
+        tx_esp["ESP32-S3<br/>纯发包机<br/>MCS0 固定速率"]
+    end
+
+    subgraph RX["🟢 接收板 (RX) — ESP32-S3 APSTA"]
+        direction TB
+        csi["📡 CSI 解析<br/>Wi-Fi 驱动回调"]
+        agc["⚙️ AGC 归一化<br/>强制固定增益"]
+        feat["📊 子载波方差<br/>64 路 I/Q → 幅度方差"]
+        algo["🧠 滑窗 + 阈值判定<br/>Spike 检测 + 前后静默确认"]
+        led["💡 WS2812B RGB LED<br/>绿·橙·红 状态反馈"]
+        udp["📤 UDP 上报<br/>JSON → 云端 :9000"]
+
+        csi --> agc --> feat --> algo
+        algo --> led
+        algo --> udp
+    end
+
+    subgraph Cloud["☁️ 云端服务器"]
+        ingest["udp_ingest.py<br/>UDP → JSONL 日志"]
+        admin["Web 管理面板<br/>Flask + SQLAlchemy"]
+        ingest --> admin
+    end
+
+    tx_esp -->|"Wi-Fi UDP 发包<br/>~100Hz"| csi
+    udp -->|"UDP :9000"| ingest
 ```
 
 ---
